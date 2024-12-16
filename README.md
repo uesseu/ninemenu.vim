@@ -1,21 +1,30 @@
+# Plugin to use emenu effectively
 
 https://qiita.com/uesseu/items/3cf513bc073bfdf7b0d4
  
 
-Example
+# Example
+If you want to use trigger key '<C-p>', you can write like this
+and use auto-completion.
 
 ```
-CompNoremap <C-p> emenu 2
-CompNoremap <C-p><C-p> emenu 2
-CompNoremap <C-p>e e
-CompNoremap <C-p>b b
-CompNoremap <C-p><C-b> b
-CompNoremap <C-p>r r
-CompNoremap <C-p><C-r> r
-CompNoremap <C-p>d b
-CompNoremap <C-p><C-d> b
-CompNoremap <C-p>c call
-CompNoremap <C-p>s set
-CompNoremap <C-p>! !
-CompNoremap <C-p>h h
+function! MenuMaker()
+  command! -nargs=* MenuNoremap call ninemenu#comp_noremap(<f-args>)
+  MenuNoremap <C-p> emenu 2
+  MenuNoremap <C-p><C-p> emenu 2
+  MenuNoremap <C-p>e e
+  MenuNoremap <C-p>b b
+  MenuNoremap <C-p><C-b> b
+  MenuNoremap <C-p>r r
+  MenuNoremap <C-p><C-r> r
+  MenuNoremap <C-p>d b
+  MenuNoremap <C-p><C-d> b
+  MenuNoremap <C-p>c call
+  MenuNoremap <C-p>s set
+  MenuNoremap <C-p>! !
+  MenuNoremap <C-p>h h
+  exec $"noremap <C-p>: {ninemenu#wrap_one_shot_complete('')}"
+  delcommand MenuNoremap
+endfunction
+au VimEnter * call MenuMaker()
 ```

@@ -1,3 +1,16 @@
+scriptencoding utf-8
+" ninemenu.vim
+" Last Change:	2024 Dec 16
+" Maintainer:	Shoichiro Nakanishi <sheepwing@kyudai.jp>
+" License:	Mit licence
+
+if exists('g:loaded_ninemenu')
+  finish
+endif
+let g:loaded_ninemenu = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! ninemenu#busy_cmd_complete(num=1)
   for c in 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
@@ -25,21 +38,8 @@ function! ninemenu#comp_noremap(trigger, command, tabnum=1)
   exec $"noremap {a:trigger} {ninemenu#wrap_one_shot_complete(a:command, a:tabnum)}"
 endfunction
 
-command! -nargs=* MenuNoremap call ninemenu#comp_noremap(<f-args>)
-
-MenuNoremap <C-p> emenu 2
-MenuNoremap <C-p><C-p> emenu 2
-MenuNoremap <C-p>e e
-MenuNoremap <C-p>b b
-MenuNoremap <C-p><C-b> b
-MenuNoremap <C-p>r r
-MenuNoremap <C-p><C-r> r
-MenuNoremap <C-p>d b
-MenuNoremap <C-p><C-d> b
-MenuNoremap <C-p>c call
-MenuNoremap <C-p>s set
-MenuNoremap <C-p>! !
-MenuNoremap <C-p>h h
+"command! -nargs=* MenuNoremap call ninemenu#comp_noremap(<f-args>)
 
 
-exec $"noremap <C-p>: {ninemenu#wrap_one_shot_complete('')}"
+let &cpo = s:save_cpo
+unlet s:save_cpo
