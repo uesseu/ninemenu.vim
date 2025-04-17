@@ -13,8 +13,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! ninemenu#busy_cmd_complete(num=1)
-  for c in 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+  for c in '1234567890.qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
     exec $"cnoremap {c} {c}{repeat(ninemenu#get_wildcharm(),a:num)}"
+    exec $"cnoremap `{c} {c}"
   endfor
 endfunction
 
@@ -29,13 +30,18 @@ function! ninemenu#one_shot_complete(tabnum=1)
   exec $"call ninemenu#busy_cmd_complete({a:tabnum})"
 endfunction
 
-function! ninemenu#wrap_one_shot_complete(command, tabnum=1)
+function! ninemenu#wrap_one_command(command, tabnum=1)
   return $":call ninemenu#one_shot_complete({a:tabnum})<CR>"
         \.$":{a:command} {ninemenu#get_wildcharm()}"
 endfunction
 
+function! ninemenu#wrap_ongoing_command(command, tabnum=1)
+  return $":call ninemenu#one_shot_complete({a:tabnum})<CR>"
+        \.$":{a:command}{ninemenu#get_wildcharm()}"
+endfunction
+
 function! ninemenu#comp_noremap(trigger, command, tabnum=1)
-  exec $"noremap {a:trigger} {ninemenu#wrap_one_shot_complete(a:command, a:tabnum)}"
+  exec $"noremap {a:trigger} {ninemenu#wrap_one_command(a:command, a:tabnum)}"
 endfunction
 
 "command! -nargs=* MenuNoremap call ninemenu#comp_noremap(<f-args>)
