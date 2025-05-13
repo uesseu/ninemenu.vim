@@ -1,0 +1,88 @@
+*ninco.vim.txt*	  ChatGPT and some compatible API on vim.
+
+Author: Shoichiro Nakanishi <sheepwing@kyudai.jp>
+License: MIT license
+
+==============================================================================
+CONTENTS                                                        *slide-contents*
+
+Introduction		|ninco-introduction|
+Requirements  	 	|ninco-functions|
+
+==============================================================================
+INTRODUCTION                                                *ninco-introduction*
+Emenu enhancing plugin.
+
+Functions                                            *ninemenu#functions*
+
+ninemenu#wrap_one_command({command}, {wildcharm}=1) *ninemenu#wrap_one_command*
+
+Wrap one command by {wildcharm}.
+This function yields key sequence to auto complete menu.
+>
+    call ninemenu#wrap_one_command('b', 1)
+<
+will yield key sequence below.
+>
+    :call ninemenu#one_shot_complete(1)<CR>:b <Tab>
+<
+This is not useful without noremap.
+
+
+ninemenu#comp_noremap({key}, {command}, {wildcharm}=1)  *ninemenu#comp_noremap*
+
+Noremap auto-complete command.
+  {key}: The start key.
+  {command}: Command to start.
+  {wildcharm}: Number of {wildcharm} to hit virtually.
+
+Example
+>
+    call ninemenu#comp_noremap('<C-p>', 'emenu', 2)
+    call ninemenu#comp_noremap('<C-p>e', 'e')
+<
+
+Example                                                *ninemenu#example*
+
+>
+  function! MenuMaker()
+    command! -nargs=* MenuNoremap call ninemenu#comp_noremap(<f-args>)
+    MenuNoremap <C-p> emenu 2
+    MenuNoremap <C-p><C-p> emenu 2
+    MenuNoremap <C-p>e e
+    MenuNoremap <C-p>b b
+    MenuNoremap <C-p><C-b> b
+    MenuNoremap <C-p>r r
+    MenuNoremap <C-p><C-r> r
+    MenuNoremap <C-p>d b
+    MenuNoremap <C-p><C-d> b
+    MenuNoremap <C-p>c call
+    MenuNoremap <C-p>s set
+    MenuNoremap <C-p>! !
+    MenuNoremap <C-p>h h
+    exec $"noremap <C-p>: {ninemenu#wrap_one_shot_complete('')}"
+    delcommand MenuNoremap
+  endfunction
+  au VimEnter * call MenuMaker()
+  function! MenuMaker()
+    command! -nargs=* MenuNoremap call ninemenu#comp_noremap(<f-args>)
+    MenuNoremap <C-p> emenu 2
+    MenuNoremap <C-p><C-p> emenu 2
+    MenuNoremap <C-p>e e
+    MenuNoremap <C-p>b b
+    MenuNoremap <C-p><C-b> b
+    MenuNoremap <C-p>r r
+    MenuNoremap <C-p><C-r> r
+    MenuNoremap <C-p>d b
+    MenuNoremap <C-p><C-d> b
+    MenuNoremap <C-p>c call
+    MenuNoremap <C-p>s set
+    MenuNoremap <C-p>! !
+    MenuNoremap <C-p>h h
+    exec $"noremap <C-p>: {ninemenu#wrap_one_shot_complete('')}"
+    delcommand MenuNoremap
+  endfunction
+  au VimEnter * call MenuMaker()
+<
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
